@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>初二4 班级名单</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+
+    ::placeholder {
+      color: #9ca3af; /* text-gray-400 */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6 flex flex-col justify-between">
+  <div class="w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-700">初二4 班级名单</h1>
+    
+    <input 
+      id="searchInput" 
+      type="text" 
+      placeholder="🔍 搜索姓名、座号、学号或性别..." 
+      class="w-full p-3 mb-6 border border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+    />
+
+    <ul id="nameList" class="space-y-2 text-lg text-gray-800">
+      <!-- 学生名单将注入此处 -->
+    </ul>
+  </div>
+
+  <footer class="text-center text-gray-500 text-sm mt-6">
+    &copy; 2025 Created by DylanLaw. All rights reserved.
+  </footer>
+
+  <script>
+    const names = [
+      "邱穆芸", "陈妍希", "张芷欣", "杨时瑜", "颜姿彤", "许亦萱", "陈嘉恩", "陈钏宁",
+      "李静恩", "刘瑞恩", "黄禹嫣", "妮娅", "陈姿卉", "何汶宣", "王歆茹", "潘姿颖",
+      "施凯馨", "陈渝恩", "戴湘霖", "王婧涵", "许悦影", "朱俊绅", "陈毅祥", "谢承邑",
+      "张智勇", "何凯旭", "赖家禾", "江致承", "刘俊祥", "卢隽益", "廖炫鑫", "刘宽辅",
+      "卢裕城", "黄康桀", "伍思源", "彭宇乐", "潘家扬", "陈晋佑", "陈有权", "余根权",
+      "黄凯杰", "黄恩杰", "黄俊熹", "黄明杰", "叶峻睿", "叶礼诚", "杨仁喆"
+    ];
+
+    const ids = [
+      "242154", "242159", "242156", "242149", "242163", "242153", "242168",
+      "242155", "242158", "242160", "242164", "242166", "242162", "242165", "242151", "242147",
+      "242150", "242148", "242157", "242152", "242167", "242189", "242177", "242190",
+      "242176", "242173", "242194", "242171", "242186", "242187", "242179", "242170",
+      "242188", "242191", "242180", "242181", "242169", "242178", "242182", "242175",
+      "242192", "242183", "242193", "242185", "242174", "242172", "242184"
+    ];
+
+    const nameList = document.getElementById("nameList");
+    const searchInput = document.getElementById("searchInput");
+
+    const studentEntries = names.map((name, idx) => ({
+      name,
+      seat: idx + 1,
+      id: ids[idx],
+      gender: idx + 1 <= 21 ? "女生" : "男生"
+    }));
+
+    function renderNames(filter = "") {
+      const keyword = filter.trim().toLowerCase();
+      nameList.innerHTML = "";
+
+      const filteredEntries = studentEntries.filter(entry =>
+        entry.name.toLowerCase().includes(keyword) ||
+        entry.seat.toString().includes(keyword) ||
+        entry.id.includes(keyword) ||
+        entry.gender.includes(keyword)
+      );
+
+      if (filteredEntries.length === 0) {
+        const li = document.createElement("li");
+        li.className = "p-4 bg-red-50 rounded-xl text-red-500 text-center";
+        li.textContent = "未找到匹配的学生";
+        nameList.appendChild(li);
+        return;
+      }
+
+      filteredEntries.forEach(entry => {
+        const li = document.createElement("li");
+        li.className = "p-3 bg-blue-50 rounded-xl hover:bg-blue-100 transition cursor-pointer";
+        li.textContent = `${entry.seat}. ${entry.name}（学号：${entry.id}，${entry.gender}，初二4）`;
+        nameList.appendChild(li);
+      });
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderNames(searchInput.value);
+    });
+
+    renderNames();
+  </script>
+</body>
+</html>
